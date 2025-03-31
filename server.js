@@ -24,8 +24,10 @@ app.post('/generate-svg', (req, res) => {
   fs.writeFileSync(mfPath, mfCode);
   fs.writeFileSync(pePath, 'Open("font.pfb"); Select("A"); Export("A.svg"); Quit();');
 
-  // Execute conversion: .mf → .pfb → .svg
+  // Execute conversion in upload directory with relative paths only
   const cmd = `cd ${uploadDir} && mf2pt1 font.mf && fontforge -script generate.pe`;
+  console.log("Running:", cmd);
+
   exec(cmd, (err, stdout, stderr) => {
     if (err) {
       console.error('Error:', stderr);
