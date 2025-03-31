@@ -6,14 +6,18 @@ RUN apt update && apt install -y \
   fontforge \
   texlive \
   texlive-font-utils \
-  git \
+  texlive-metapost \
+  t1utils \
+  perl \
   curl \
-  wget \
   build-essential
 
-# ✅ GitHub mirror 사용!
-RUN git clone https://github.com/thepirat000/mf2pt1.git && \
-  cd mf2pt1 && make && make install && cd .. && rm -rf mf2pt1
+# mf2pt1 소스 복사
+COPY mf2pt1 /mf2pt1
+
+# mf2pt1 명령어를 전역으로 등록
+RUN chmod +x /mf2pt1/mf2pt1.pl && \
+    ln -s /mf2pt1/mf2pt1.pl /usr/local/bin/mf2pt1
 
 WORKDIR /app
 COPY . .
